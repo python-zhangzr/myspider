@@ -17,5 +17,5 @@ class FoodItem(scrapy.Item):
     criticnum = scrapy.Field()
     popular = scrapy.Field()
     popularnum= scrapy.Field()
-    imangeurl= scrapy.Field()
+    imageurl= scrapy.Field()
     

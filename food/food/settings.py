@@ -24,7 +24,7 @@ SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderPriorityQueue"
 LOG_LEVEL = 'DEBUG'
 DOWNLOAD_DELAY = 1
 
-REDIS_HOST = "192.168.43.62"
+REDIS_HOST = "10.200.135.34"
 REDIS_PORT = 6379
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'food (+http://www.yourdomain.com)'

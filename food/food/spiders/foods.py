@@ -23,24 +23,31 @@ class FoodsSpider(RedisSpider):
 
     def parse(self, response):
         for link in Selector(response).xpath('//dl[@class="listnav_dl_style1 w990 clearfix"]//dd//a/@href').extract():
-        	for i in range(80):
-        		fulllink=link+'?&page=%d'%i
-        		response = requests.get(fulllink, stream=True)
-            	if not response:
-                	break
-        		yield scrapy.Request(fulllink,callback=self.parse_item1)
+            for i in range(80):
+                fulllink=link+'?&page=%d'%i
+                response = requests.get(fulllink, stream=True)
+                if not response:
+                    break
+                yield scrapy.Request(fulllink,callback=self.parse_item1)
 
-  	def parse_item1(self, response):
-  		for link in Selector(response).xpath('//div[@class="listtyle1"]').extract():
-  			item=FoodItem()
-  			item['foodname']=Selector(response).xpath('.//div[@class="i_w"]//div[@class="c1"]/strong/text()').extract()[0]
-  			item['critic']=Selector(response).xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[1]
-  			item['criticnum']=Selector(response).xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[0]
-  			item['popular']=Selector(response).xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[4]
-  			item['popularnum']=Selector(response).xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[3]
-  			item['imangeurl']=Selector(response).xpath('.//img/@src').extract()[0]
-  			yield item
-  			
+    def parse_item1(self, response):
+        for link in Selector(response).xpath('//div[@class="listtyle1"]'):
+            item=FoodItem()
+            try:
+                item['foodname']=link.xpath('.//div[@class="i_w"]//div[@class="c1"]/strong/text()').extract()[0]
+                item['critic']=link.xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[1]
+                item['criticnum']=link.xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[0]
+                if link.xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[4]:
+                    item['popularnum']=link.xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[3]
+                    item['popular']=link.xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[4]
+                else:
+                    item['popular']=link.xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[3]
+                    item['popularnum']=link.xpath('.//div[@class="i_w"]//div[@class="c1"]/span/text()').extract()[0].split(" ")[2]
+                item['imageurl']=link.xpath('.//img/@src').extract()[0]
+            except:
+                pass
+            yield item
+                    
 
 
   		
