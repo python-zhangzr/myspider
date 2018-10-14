@@ -7,7 +7,7 @@ from scrapy.selector import Selector
 class PptzipSpider(scrapy.Spider):
     name = 'pptzip'
     allowed_domains = ['1ppt.com']
-    start_urls = ['http://1ppt.com/']
+    start_urls = ['http://www.1ppt.com/']
     
     def parse(self, response):
         for link in Selector(response).xpath('//div[@class="w center mt4"]//div[contains(@class, "col_nav")]//ul/li[position()>1]/a/@href').extract():
